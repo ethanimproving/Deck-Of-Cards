@@ -9,7 +9,7 @@ public class Deck {
     private final List<Card> discard = new ArrayList<>();
 
     public Deck() {
-        for (var suit : Suits.values()) {
+        for (var suit : Suit.values()) {
             for (var rank : Rank.values()) {
                 deck.add(new Card(rank, suit));
             }
@@ -24,5 +24,9 @@ public class Deck {
         discard.add(card);
         deck.remove(card);
         return card;
+    }
+
+    public List<Card> getDeck() {
+        return deck;
     }
 }

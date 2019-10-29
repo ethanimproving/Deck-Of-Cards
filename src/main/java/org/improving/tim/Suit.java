@@ -1,6 +1,6 @@
 package org.improving.tim;
 
-public enum Suits {
+public enum Suit {
     Hearts,
     Spades,
     Diamonds,

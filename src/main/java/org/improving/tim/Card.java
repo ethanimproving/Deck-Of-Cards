@@ -2,9 +2,9 @@ package org.improving.tim;
 
 public class Card {
     private final Rank rank;
-    private final Suits suit;
+    private final Suit suit;
 
-    public Card(Rank rank, Suits suit) {
+    public Card(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
     }
@@ -13,7 +13,7 @@ public class Card {
         return rank;
     }
 
-    public Suits getSuits() {
+    public Suit getSuit() {
         return suit;
     }
 
