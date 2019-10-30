@@ -62,6 +62,10 @@ public class JudgeHand {
                     xSet = getPairs(x).max(Comparator.comparing(p -> p.getValue())).orElse(null);
                     ySet = getPairs(y).max(Comparator.comparing(p -> p.getValue())).orElse(null);
                     return evaluateHighestRank(xSet, ySet);
+                case Pair:
+                    xSet = getRankOfMatches(x, 2);
+                    ySet = getRankOfMatches(y, 2);
+                    return evaluateHighestRank(xSet, ySet);
                 default:
                     return 0;
             }
