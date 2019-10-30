@@ -116,4 +116,21 @@ class PokerGameTest {
         assertEquals(3, result);
     }
 
+    @Test
+    public void Is_Two_Pair_Should_Return_True_When_Two_Ranks_Are_The_Same() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.King, Suit.Spades),
+            new Card(Rank.Ten, Suit.Hearts),
+            new Card(Rank.Ace, Suit.Clubs),
+            new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = PokerGame.isTwoPair(hand);
+
+        // Assert
+        assertTrue(result);
+    }
 }
