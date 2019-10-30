@@ -7,13 +7,10 @@ public class PokerGame {
 
     public static boolean isFlush(PlayerHand hand) {
         var suit = hand.getHand().get(0).getSuit();
-        for (var card : hand.getHand()) {
-            if (!card.getSuit().equals(suit)) return false;
-        }
-        return true;
+        return hand.getHand().stream().allMatch(e -> e.getSuit().equals(suit));
     }
 
-    public boolean isStraight(PlayerHand playerHand){
+    public static boolean isStraight(PlayerHand playerHand){
         PokerGame.sortAscending(playerHand);
 
         //first put the handArray in order in a new array
@@ -37,7 +34,6 @@ public class PokerGame {
     }
 
     public static void sortAscending(PlayerHand playerHand){
-        Collections.sort(playerHand.getHand(), Comparator.comparing(c -> c.getRank().ordinal()));
-//        Collections.sort(playerHand.getHand(), Collections.reverseOrder());
+        Collections.sort(playerHand.getHand(), Comparator.comparing(c -> c.getRank().getValue()));
     }
 }

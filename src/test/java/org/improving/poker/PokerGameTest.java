@@ -54,7 +54,7 @@ class PokerGameTest {
     }
 
     @Test
-    void isFlushShouldReturnTrueWhenAllSuitsAreTheSame() {
+    void Is_Flush_Should_Return_True_If_Suits_Are_The_Same() {
         // Arrange
         hand.getHand().addAll(Arrays.asList(H1, H2, H5, H7, H9));
 
@@ -66,7 +66,7 @@ class PokerGameTest {
     }
 
     @Test
-    void sortAscendingTest() {
+    void Sort_Ascending_Should_Order_Cards_From_Least_To_Greatest() {
         // Arrange
         hand.getHand().addAll(Arrays.asList(H3, H2, H4, H6, H5));
 
@@ -75,7 +75,25 @@ class PokerGameTest {
         var result = hand.getHand();
 
         // Assert
-        var expected = Arrays.asList(H6, H5, H4, H3, H2);
+        var expected = Arrays.asList(H2, H3, H4, H5, H6);
         assertEquals(expected, result);
+    }
+
+    @Test
+    public void Is_Straight_Should_Return_True_If_Suits_Are_The_Same() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+                new Card(Rank.Ace, Suit.Spades),
+                new Card(Rank.King, Suit.Spades),
+                new Card(Rank.Queen, Suit.Clubs),
+                new Card(Rank.Jack, Suit.Spades),
+                new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = PokerGame.isStraight(hand);
+
+        // Assert
+        assertTrue(result);
     }
 }
