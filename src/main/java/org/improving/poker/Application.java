@@ -10,6 +10,6 @@ public class Application {
         var hand = new PlayerHand(deck);
         hand.showHand();
         var judge = JudgeHand.judge(hand);
-        System.out.println(judge);
+        System.out.println(judge.getMessage());
     }
 }

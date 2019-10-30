@@ -1,11 +1,11 @@
 package org.improving.poker;
 
 public enum PokerHand {
-    HighCard("Straight!"),
-    Pair("Three Cards."),
-    ThreeOfAKind("Two Pairs."),
-    TwoPair("One Pair."),
-    Straight("No Pair..."),
+    HighCard("No Pair..."),
+    Pair("One Pair."),
+    ThreeOfAKind("Three Cards."),
+    TwoPair("Two Pairs."),
+    Straight("Straight!"),
     Flush("Flush!"),
     FullHouse("Fu-Fu-Full House!"),
     FourOfAKind("FOUR OF A KIND!!"),
