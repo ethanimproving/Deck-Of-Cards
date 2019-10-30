@@ -59,4 +59,8 @@ public class PokerGame {
         var multipleCards = map.keySet().stream().filter(k -> map.get(k) > 1);
         return multipleCards.anyMatch(k -> map.get(k) == 4);
     }
+
+    public static boolean isFullHouse(PlayerHand playerHand) {
+        return isThreeOfAKind(playerHand) && isPair(playerHand);
+    }
 }

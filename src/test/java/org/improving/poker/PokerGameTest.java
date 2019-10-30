@@ -188,4 +188,22 @@ class PokerGameTest {
         assertTrue(result);
     }
 
+    @Test
+    public void Is_Full_House_Should_Return_True_When_Three_Ranks_Are_The_Same_And_The_Other_Two_Are_The_Same() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+                new Card(Rank.Ace, Suit.Spades),
+                new Card(Rank.Ace, Suit.Clubs),
+                new Card(Rank.Ten, Suit.Clubs),
+                new Card(Rank.Ten, Suit.Diamonds),
+                new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = PokerGame.isFullHouse(hand);
+
+        // Assert
+        assertTrue(result);
+    }
+
 }
