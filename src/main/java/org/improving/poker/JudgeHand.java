@@ -38,6 +38,7 @@ public class JudgeHand {
                 case StraightFlush:
                 case Flush:
                 case Straight:
+                case HighCard:
                     // The Player With The Highest Card Used In The Straight
                     //  The Flush With The Highest Card Wins
                     // The Straight Ending In The Highest Card Wins

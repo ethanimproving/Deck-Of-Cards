@@ -678,6 +678,32 @@ class JudgeHandTest {
             // Assert
             assertEquals(-1, xResult);
         }
+
+        @Test
+        public void Compare_Highcard_Should_Return_Highest_Pair_As_Winner() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Three, Suit.Spades),
+                    new Card(Rank.Five, Suit.Diamonds),
+                    new Card(Rank.Eight, Suit.Hearts),
+                    new Card(Rank.Seven, Suit.Clubs),
+                    new Card(Rank.Ten, Suit.Diamonds)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Three, Suit.Spades),
+                    new Card(Rank.Five, Suit.Diamonds),
+                    new Card(Rank.Eight, Suit.Hearts),
+                    new Card(Rank.Seven, Suit.Clubs),
+                    new Card(Rank.Jack, Suit.Diamonds)
+            ));
+
+            // Act
+            var xResult = JudgeHand.compare(hand, secondHand);
+
+            // Assert
+            assertEquals(1, xResult);
+        }
     }
 
 
