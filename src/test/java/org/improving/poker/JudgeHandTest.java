@@ -5,6 +5,7 @@ import org.improving.tim.Deck;
 import org.improving.tim.Rank;
 import org.improving.tim.Suit;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -45,10 +46,12 @@ class JudgeHandTest {
     Card D1 = new Card(Rank.Two, Suit.Diamonds);
 
     PlayerHand hand;
+    Deck deck;
 
     @BeforeEach
     void init() {
-        hand = new PlayerHand(new Deck());
+        deck = new Deck();
+        hand = new PlayerHand(deck);
         hand.getHand().clear();
     }
 
@@ -369,5 +372,288 @@ class JudgeHandTest {
         // Assert
         assertEquals(PokerHand.FullHouse, result);
     }
+
+    @Nested
+    class CompareTests{
+
+        PlayerHand secondHand;
+
+        @BeforeEach
+        public void createSecondHand() {
+            secondHand = new PlayerHand(deck);
+            secondHand.getHand().clear();
+        }
+
+        @Test
+        public void Compare_Should_Return_Negative_One_When_X_Is_Better_Hand() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.Ace, Suit.Clubs),
+                    new Card(Rank.Ten, Suit.Clubs),
+                    new Card(Rank.Ten, Suit.Diamonds),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.King, Suit.Spades),
+                    new Card(Rank.Queen, Suit.Clubs),
+                    new Card(Rank.Jack, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            // Act
+            var result = JudgeHand.compare(hand, secondHand);
+
+            // Assert
+            assertEquals(-1, result);
+        }
+
+        @Test
+        public void Compare_Should_Return_One_When_Y_Is_Better_Hand() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.Ace, Suit.Clubs),
+                    new Card(Rank.Ten, Suit.Clubs),
+                    new Card(Rank.Ten, Suit.Diamonds),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.King, Suit.Spades),
+                    new Card(Rank.Queen, Suit.Clubs),
+                    new Card(Rank.Jack, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            // Act
+            var result = JudgeHand.compare(secondHand, hand);
+
+            // Assert
+            assertEquals(1, result);
+        }
+
+        @Test
+        public void Compare_Should_Return_Zero_When_Y_And_X_Are_Equal() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.Three, Suit.Clubs),
+                    new Card(Rank.Two, Suit.Clubs),
+                    new Card(Rank.Ten, Suit.Diamonds),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Diamonds),
+                    new Card(Rank.Queen, Suit.Clubs),
+                    new Card(Rank.Jack, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            // Act
+            var result = JudgeHand.compare(secondHand, hand);
+
+            // Assert
+            assertEquals(0, result);
+        }
+
+        @Test
+        public void Compare_Should_Return_Zero_When_Y_And_X_Are_Royal_Flush() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.King, Suit.Spades),
+                    new Card(Rank.Queen, Suit.Spades),
+                    new Card(Rank.Jack, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Diamonds),
+                    new Card(Rank.King, Suit.Diamonds),
+                    new Card(Rank.Queen, Suit.Diamonds),
+                    new Card(Rank.Jack, Suit.Diamonds),
+                    new Card(Rank.Ten, Suit.Diamonds)
+            ));
+
+            // Act
+            var result = JudgeHand.compare(secondHand, hand);
+
+            // Assert
+            assertEquals(0, result);
+        }
+
+        @Test
+        public void Compare_Should_Return_Negative_One_When_X_Royal_Flush_Highcard_Is_Greater_Than_Y_Royal_Flush_Highcard() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Nine, Suit.Spades),
+                    new Card(Rank.King, Suit.Spades),
+                    new Card(Rank.Queen, Suit.Spades),
+                    new Card(Rank.Jack, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Nine, Suit.Spades),
+                    new Card(Rank.Eight, Suit.Spades),
+                    new Card(Rank.Queen, Suit.Spades),
+                    new Card(Rank.Jack, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            // Act
+            var result = JudgeHand.compare(hand, secondHand);
+            var result2 = JudgeHand.compare(secondHand, hand);
+
+
+            // Assert
+            assertEquals(-1, result);
+            assertEquals(1, result2);
+        }
+
+        @Test
+        public void Compare_Four_Of_A_Kind_Should_Return_Highest_Set_As_Winner() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Hearts),
+                    new Card(Rank.Ten, Suit.Clubs),
+                    new Card(Rank.Ten, Suit.Diamonds),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Hearts),
+                    new Card(Rank.Six, Suit.Hearts),
+                    new Card(Rank.Six, Suit.Clubs),
+                    new Card(Rank.Six, Suit.Diamonds),
+                    new Card(Rank.Six, Suit.Spades)
+            ));
+
+            // Act
+            var xResult = JudgeHand.compare(hand, secondHand);
+            var yResult = JudgeHand.compare(secondHand, hand);
+
+
+            // Assert
+            assertEquals(-1, xResult);
+            assertEquals(1, yResult);
+        }
+
+        @Test
+        public void Compare_Full_House_Should_Return_Highest_Set_As_Winner() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Hearts),
+                    new Card(Rank.Ten, Suit.Clubs),
+                    new Card(Rank.Ten, Suit.Diamonds),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Hearts),
+                    new Card(Rank.Six, Suit.Hearts),
+                    new Card(Rank.Six, Suit.Clubs),
+                    new Card(Rank.Six, Suit.Diamonds),
+                    new Card(Rank.Six, Suit.Spades)
+            ));
+
+            // Act
+            var xResult = JudgeHand.compare(hand, secondHand);
+            var yResult = JudgeHand.compare(secondHand, hand);
+
+
+            // Assert
+            assertEquals(-1, xResult);
+            assertEquals(1, yResult);
+        }
+
+        @Test
+        public void Compare_Flush_Should_Return_Highest_Card_As_Winner() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Spades),
+                    new Card(Rank.Queen, Suit.Spades),
+                    new Card(Rank.Two, Suit.Spades),
+                    new Card(Rank.Seven, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Eight, Suit.Hearts),
+                    new Card(Rank.Six, Suit.Hearts),
+                    new Card(Rank.Two, Suit.Hearts),
+                    new Card(Rank.Four, Suit.Hearts),
+                    new Card(Rank.Jack, Suit.Hearts)
+            ));
+
+            // Act
+            var xResult = JudgeHand.compare(hand, secondHand);
+
+            // Assert
+            assertEquals(-1, xResult);
+        }
+
+        @Test
+        public void Compare_Straight_Should_Return_Highest_Card_As_Winner() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.King, Suit.Spades),
+                    new Card(Rank.Queen, Suit.Clubs),
+                    new Card(Rank.Jack, Suit.Spades),
+                    new Card(Rank.Ten, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Eight, Suit.Hearts),
+                    new Card(Rank.Six, Suit.Spades),
+                    new Card(Rank.Seven, Suit.Hearts),
+                    new Card(Rank.Nine, Suit.Diamonds),
+                    new Card(Rank.Ten, Suit.Hearts)
+            ));
+
+            // Act
+            var xResult = JudgeHand.compare(hand, secondHand);
+
+            // Assert
+            assertEquals(-1, xResult);
+        }
+
+        @Test
+        public void Compare_Two_Pairs_Should_Return_Highest_Pair_As_Winner() {
+            // Arrange
+            hand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Ace, Suit.Spades),
+                    new Card(Rank.King, Suit.Hearts),
+                    new Card(Rank.Queen, Suit.Clubs),
+                    new Card(Rank.Ace, Suit.Clubs),
+                    new Card(Rank.King, Suit.Spades)
+            ));
+
+            secondHand.getHand().addAll(Arrays.asList(
+                    new Card(Rank.Eight, Suit.Hearts),
+                    new Card(Rank.Six, Suit.Spades),
+                    new Card(Rank.Seven, Suit.Hearts),
+                    new Card(Rank.Eight, Suit.Diamonds),
+                    new Card(Rank.Six, Suit.Hearts)
+            ));
+
+            // Act
+            var xResult = JudgeHand.compare(hand, secondHand);
+
+            // Assert
+            assertEquals(-1, xResult);
+        }
+    }
+
+
 
 }
