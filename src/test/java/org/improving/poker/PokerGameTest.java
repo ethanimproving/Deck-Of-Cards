@@ -83,11 +83,11 @@ class PokerGameTest {
     public void Is_Straight_Should_Return_True_If_Suits_Are_The_Same() {
         // Arrange
         hand.getHand().addAll(Arrays.asList(
-                new Card(Rank.Ace, Suit.Spades),
-                new Card(Rank.King, Suit.Spades),
-                new Card(Rank.Queen, Suit.Clubs),
-                new Card(Rank.Jack, Suit.Spades),
-                new Card(Rank.Ten, Suit.Spades)
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.King, Suit.Spades),
+            new Card(Rank.Queen, Suit.Clubs),
+            new Card(Rank.Jack, Suit.Spades),
+            new Card(Rank.Ten, Suit.Spades)
         ));
 
         // Act
@@ -96,4 +96,24 @@ class PokerGameTest {
         // Assert
         assertTrue(result);
     }
+
+    @Test
+    void Map_Hand_Should_Increment_Value_Of_Key_When_Rank_Is_The_Same() {
+        // Arrange
+        var cards = Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.King, Suit.Spades),
+            new Card(Rank.Ace, Suit.Clubs),
+            new Card(Rank.Jack, Suit.Spades),
+            new Card(Rank.Ace, Suit.Hearts)
+        );
+
+        // Act
+        var mapOfCards = PokerGame.mapHand(cards);
+        var result = mapOfCards.get(Rank.Ace);
+
+        // Assert
+        assertEquals(3, result);
+    }
+
 }
