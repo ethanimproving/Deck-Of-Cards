@@ -36,6 +36,12 @@ public class PokerGame {
         return map;
     }
 
+    public static boolean isPair(PlayerHand playerHand) {
+        var mapOfHand = mapHand(playerHand.getHand());
+        var multipleCards = mapOfHand.keySet().stream().filter(k -> mapOfHand.get(k) > 1);
+        return multipleCards.anyMatch(k -> mapOfHand.get(k) == 2);
+    }
+
     public static boolean isTwoPair(PlayerHand playerHand) {
         var mapOfHand = mapHand(playerHand.getHand());
         var multipleCards = mapOfHand.keySet().stream().filter(k -> mapOfHand.get(k) > 1);
