@@ -170,4 +170,22 @@ class PokerGameTest {
         assertTrue(result);
     }
 
+    @Test
+    public void Is_Four_Of_A_Kind_Should_Return_True_When_Four_Ranks_Are_The_Same() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+                new Card(Rank.Ace, Suit.Spades),
+                new Card(Rank.King, Suit.Spades),
+                new Card(Rank.Ace, Suit.Hearts),
+                new Card(Rank.Ace, Suit.Clubs),
+                new Card(Rank.Ace, Suit.Diamonds)
+        ));
+
+        // Act
+        var result = PokerGame.isFourOfAKind(hand);
+
+        // Assert
+        assertTrue(result);
+    }
+
 }

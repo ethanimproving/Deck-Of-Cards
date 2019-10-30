@@ -53,4 +53,10 @@ public class PokerGame {
         var multipleCards = map.keySet().stream().filter(k -> map.get(k) > 1);
         return multipleCards.anyMatch(k -> map.get(k) == 3);
     }
+
+    public static boolean isFourOfAKind(PlayerHand playerHand) {
+        Map<Rank, Integer> map = mapHand(playerHand.getHand());
+        var multipleCards = map.keySet().stream().filter(k -> map.get(k) > 1);
+        return multipleCards.anyMatch(k -> map.get(k) == 4);
+    }
 }
