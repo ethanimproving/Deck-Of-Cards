@@ -4,7 +4,6 @@ import org.improving.tim.Card;
 import org.improving.tim.Deck;
 import org.improving.tim.Rank;
 import org.improving.tim.Suit;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PokerGameTest {
+class JudgeHandTest {
 
     Card H1 = new Card(Rank.Two, Suit.Hearts);
     Card H2 = new Card(Rank.Three, Suit.Hearts);
@@ -54,12 +53,12 @@ class PokerGameTest {
     }
 
     @Test
-    void Is_Flush_Should_Return_True_If_Suits_Are_The_Same() {
+    void Is_Flush_Should_Return_True_If_Suit_Are_The_Same() {
         // Arrange
         hand.getHand().addAll(Arrays.asList(H1, H2, H5, H7, H9));
 
         // Act
-        var result = PokerGame.isFlush(hand);
+        var result = JudgeHand.isFlush(hand);
 
         // Assert
         assertTrue(result);
@@ -71,7 +70,7 @@ class PokerGameTest {
         hand.getHand().addAll(Arrays.asList(H3, H2, H4, H6, H5));
 
         // Act
-        PokerGame.sortAscending(hand);
+        JudgeHand.sortAscending(hand);
         var result = hand.getHand();
 
         // Assert
@@ -80,7 +79,7 @@ class PokerGameTest {
     }
 
     @Test
-    public void Is_Straight_Should_Return_True_If_Suits_Are_The_Same() {
+    public void Is_Straight_Should_Return_True_If_Suit_Are_The_Same() {
         // Arrange
         hand.getHand().addAll(Arrays.asList(
             new Card(Rank.Ace, Suit.Spades),
@@ -91,7 +90,7 @@ class PokerGameTest {
         ));
 
         // Act
-        var result = PokerGame.isStraight(hand);
+        var result = JudgeHand.isStraight(hand);
 
         // Assert
         assertTrue(result);
@@ -109,7 +108,7 @@ class PokerGameTest {
         );
 
         // Act
-        var mapOfCards = PokerGame.mapHand(cards);
+        var mapOfCards = JudgeHand.mapHand(cards);
         var result = mapOfCards.get(Rank.Ace);
 
         // Assert
@@ -128,7 +127,7 @@ class PokerGameTest {
         ));
 
         // Act
-        var result = PokerGame.isPair(hand);
+        var result = JudgeHand.isPair(hand);
 
         // Assert
         assertTrue(result);
@@ -146,7 +145,7 @@ class PokerGameTest {
         ));
 
         // Act
-        var result = PokerGame.isTwoPair(hand);
+        var result = JudgeHand.isTwoPair(hand);
 
         // Assert
         assertTrue(result);
@@ -164,7 +163,7 @@ class PokerGameTest {
         ));
 
         // Act
-        var result = PokerGame.isThreeOfAKind(hand);
+        var result = JudgeHand.isThreeOfAKind(hand);
 
         // Assert
         assertTrue(result);
@@ -182,7 +181,7 @@ class PokerGameTest {
         ));
 
         // Act
-        var result = PokerGame.isFourOfAKind(hand);
+        var result = JudgeHand.isFourOfAKind(hand);
 
         // Assert
         assertTrue(result);
@@ -200,10 +199,175 @@ class PokerGameTest {
         ));
 
         // Act
-        var result = PokerGame.isFullHouse(hand);
+        var result = JudgeHand.isFullHouse(hand);
 
         // Assert
         assertTrue(result);
+    }
+
+    @Test
+    public void Judge_Should_Recognize_A_Flush() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.Ten, Suit.Spades),
+            new Card(Rank.Two, Suit.Spades),
+            new Card(Rank.Three, Suit.Spades),
+            new Card(Rank.Five, Suit.Spades)
+        ));
+
+        // Act
+        var result = JudgeHand.judge(hand);
+
+        // Assert
+        assertEquals(PokerHand.Flush, result);
+    }
+
+
+    @Test
+    public void Judge_Should_Recognize_A_Straight() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.King, Suit.Spades),
+            new Card(Rank.Queen, Suit.Clubs),
+            new Card(Rank.Jack, Suit.Spades),
+            new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = JudgeHand.judge(hand);
+
+        // Assert
+        assertEquals(PokerHand.Straight, result);
+    }
+
+    @Test
+    public void Judge_Should_Recognize_A_StraightFlush() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Nine, Suit.Spades),
+            new Card(Rank.King, Suit.Spades),
+            new Card(Rank.Queen, Suit.Spades),
+            new Card(Rank.Jack, Suit.Spades),
+            new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = JudgeHand.judge(hand);
+
+        // Assert
+        assertEquals(PokerHand.StraightFlush, result);
+    }
+
+    @Test
+    public void Judge_Should_Recognize_A_RoyalFlush() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.King, Suit.Spades),
+            new Card(Rank.Queen, Suit.Spades),
+            new Card(Rank.Jack, Suit.Spades),
+            new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = JudgeHand.judge(hand);
+
+        // Assert
+        assertEquals(PokerHand.RoyalFlush, result);
+    }
+
+
+    @Test
+    public void Judge_Should_Recognize_A_Pair() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.King, Suit.Spades),
+            new Card(Rank.Queen, Suit.Spades),
+            new Card(Rank.Ace, Suit.Clubs),
+            new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = JudgeHand.judge(hand);
+
+        // Assert
+        assertEquals(PokerHand.Pair, result);
+    }
+
+
+    @Test
+    public void Judge_Should_Recognize_A_Two_Pair() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.King, Suit.Spades),
+            new Card(Rank.Ten, Suit.Clubs),
+            new Card(Rank.Ace, Suit.Clubs),
+            new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = JudgeHand.judge(hand);
+
+        // Assert
+        assertEquals(PokerHand.TwoPair, result);
+    }
+
+    @Test
+    public void Judge_Should_Recognize_A_Three_Of_A_Kind() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.King, Suit.Spades),
+            new Card(Rank.Ten, Suit.Clubs),
+            new Card(Rank.Ten, Suit.Diamonds),
+            new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = JudgeHand.judge(hand);
+
+        // Assert
+        assertEquals(PokerHand.ThreeOfAKind, result);
+    }
+
+    @Test
+    public void Judge_Should_Recognize_A_Four_Of_A_Kind() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.Ten, Suit.Hearts),
+            new Card(Rank.Ten, Suit.Clubs),
+            new Card(Rank.Ten, Suit.Diamonds),
+            new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = JudgeHand.judge(hand);
+
+        // Assert
+        assertEquals(PokerHand.FourOfAKind, result);
+    }
+
+    @Test
+    public void Judge_Should_Recognize_A_Full_House() {
+        // Arrange
+        hand.getHand().addAll(Arrays.asList(
+            new Card(Rank.Ace, Suit.Spades),
+            new Card(Rank.Ace, Suit.Clubs),
+            new Card(Rank.Ten, Suit.Clubs),
+            new Card(Rank.Ten, Suit.Diamonds),
+            new Card(Rank.Ten, Suit.Spades)
+        ));
+
+        // Act
+        var result = JudgeHand.judge(hand);
+
+        // Assert
+        assertEquals(PokerHand.FullHouse, result);
     }
 
 }

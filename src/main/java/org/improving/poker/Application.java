@@ -9,7 +9,7 @@ public class Application {
         var deck = new Deck();
         var hand = new PlayerHand(deck);
         hand.showHand();
-        var isFlush = PokerGame.isFlush(hand);
+        var isFlush = JudgeHand.isFlush(hand);
         System.out.println(isFlush);
     }
 }

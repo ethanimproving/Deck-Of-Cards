@@ -5,7 +5,25 @@ import org.improving.tim.Rank;
 
 import java.util.*;
 
-public class PokerGame {
+public class JudgeHand {
+
+    public static PokerHand judge(PlayerHand playerHand) {
+        var isFlush = isFlush(playerHand);
+        var isStraight = isStraight(playerHand);
+        var maxValue = playerHand.getHand().stream().map(c -> c.getRank().getValue()).max(Integer::compare).orElse(0);
+
+        if (maxValue == 14 && isFlush && isStraight) return PokerHand.RoyalFlush;
+        if (isFlush && isStraight) return PokerHand.StraightFlush;
+        if (isFourOfAKind(playerHand)) return PokerHand.FourOfAKind;
+        if (isFullHouse(playerHand)) return PokerHand.FullHouse;
+        if (isFlush) return PokerHand.Flush;
+        if (isStraight) return PokerHand.Straight;
+        if (isTwoPair(playerHand)) return PokerHand.TwoPair;
+        if (isThreeOfAKind(playerHand)) return PokerHand.ThreeOfAKind;
+        if (isPair(playerHand)) return PokerHand.Pair;
+
+        return PokerHand.HighCard;
+    }
 
     public static boolean isFlush(PlayerHand playerHand) {
         var suit = playerHand.getHand().get(0).getSuit();
