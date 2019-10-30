@@ -47,4 +47,10 @@ public class PokerGame {
         var multipleCards = mapOfHand.keySet().stream().filter(k -> mapOfHand.get(k) > 1);
         return multipleCards.filter(k -> mapOfHand.get(k).equals(2)).count() == 2;
     }
+
+    public static boolean isThreeOfAKind(PlayerHand playerHand) {
+        Map<Rank, Integer> map = mapHand(playerHand.getHand());
+        var multipleCards = map.keySet().stream().filter(k -> map.get(k) > 1);
+        return multipleCards.anyMatch(k -> map.get(k) == 3);
+    }
 }
